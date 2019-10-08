@@ -14,26 +14,41 @@
 
  - App Key: 开发者每个账号都有对应的App Key，请求广告时需要用到该参数
  - App Id: 开发者每创建一个应用后，系统会自动生成App Id
- - Custom Id: 用于区分不同的游戏或者广告位等，由开发者自定义
+ - Custom Id: 用于区分不同的游戏或者广告位等，由开发者自定义, 可以传空字符串
 
-## 集成SDK
-
- - SDK加载加入页面的body部分 
-    ```html 
-    <script type="text/javascript" src="//cdn.directapk.net:8085/shiningstar/acm/sdk.js"></script>
-    ```
-
- - 初始化Manager
-    ```javascript
-    var manager = new shiningstar.acm.Manager(APP_ID, APP_KEY, CUSTOM_ID);
-    ```
+### 初始化SDK
+   ```javascript
+   function init(args) {
+      if (typeof shiningstars.acm.Manager != "undefined"){ // check the bridge 
+         var manager = shiningstars.acm.Manager;
+         if (manager && manager.version == SUPPORTED_VERSION) { // check if SDK version is supported
+            // initialize API
+            manager.initialize(APP_ID, APP_KEY, CUSTOM_ID);
+            // check APIs
+            var user = manager.User;
+            var store = manager.Store;
+            var event = manager.Event;
+            var adloader = manager.AdLoader;
+            var adBanner = manager.AdBanner;
+         }
+      }
+   }
+   ```
 
 ## AC Market SDK APIs
 
-### Class shiningstar.acm.User
+### Class shiningstars.acm.Manager
 
-#### Methods
- - User(manager): manager 是Manager class创建的实例
+#### Properties
+
+ - version: SDK version
+ - User: 用户API
+ - Store: 存储API
+ - Event: 事件上报API
+ - AdLoader: 激励广告API
+ - AdBanner: 横幅广告API
+
+### Class shiningstars.acm.User
 
 #### Properties
 
@@ -42,30 +57,66 @@
  - location: 地区
  - lang: 语言
 
-### Class shiningstar.acm.Store
+### Class shiningstars.acm.Store
 
 #### Methods
 
- - Store(manager): manager 是Manager class创建的实例
- - setData(json): 存储数据
- - getData(): 提取数据
+ - setData(data, callback): 存储数据
+ - getData(callback): 提取数据
 
-### Class shiningstar.acm.AdLoader
+### Class shiningstars.acm.Event
 
 #### Methods
 
- - AdLoader(manager): manager 是Manager class创建的实例
- - addEventListener(event_id, callback): 注册侦听事件
+ - log(timestamp, JSON.stringify(event)): 存储结构化事件, timestamp是UNIX timestamp, 如果是当前时间传0
+
+### Class shiningstars.acm.AdLoader
+
+#### Methods
+
+ - addEventListener(callback): 注册侦听事件
  - load(): 用于提前加载广告，提前加载完成再播放利于提高用户体验
  - show(reward_id, user_id): 展示广告
 
 #### Events
- - AD_LOADED: 加载完成可以使用show方法来播放
- - AD_COMPLETED: 广告播放完毕
- - VIDEO_CLICKED: 广告被点击
- - VIDEO_LOAD_FAILED: 广告素材加载失败
+ - AD_LOADED = 1: 加载完成可以使用show方法来播放
+ - AD_COMPLETED = 2: 广告播放完毕
+ - VIDEO_CLICKED = 3: 广告被点击
+ - VIDEO_LOAD_FAILED = 4: 广告素材加载失败
+
+#### Example
+
+   ```javascript
+   function callback(e) {
+      if (e == adloader.AD_LOADED) {
+         adloader.show(REWARD_ID, USER_ID);
+      }
+   }
+
+   function show(args) {
+      if (adloader){
+         adloader.addEventListener(callback);
+         adloader.load();
+         // show some game information
+      }
+   }
+   ```
+### Class shiningstars.acm.AdBanner
+
+#### Methods
+
+ - show(): 显示底部Banner, 默认是显示状态
+ - hide(): 隐藏Banner
+
+#### Properties
+ - height: Banner高度
+ - width: Banner宽度
 
 ## 历史版本
+
+### v0.1.1
+ - 增加SDK版本查询
+ - 更改API使用方式
 
 ### v0.1.0
 
