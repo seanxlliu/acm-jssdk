@@ -48,6 +48,16 @@
  - AdLoader: 激励广告API
  - AdBanner: 横幅广告API
 
+#### Methods
+
+ - addEventListener(callback): 注册侦听事件
+ - exit(): 退出时调用
+
+#### Events
+
+ - PAUSE = 0: 当H5游戏所在的Activity被切换到后台时，触发Activity的onPause()事件
+ - RESUME = 1: 当Activity切换到前台，触发Activity的onResume()事件
+
 ### Class shiningstars.acm.User
 
 #### Properties
@@ -68,7 +78,7 @@
 
 #### Methods
 
- - log(timestamp, JSON.stringify(event)): 存储结构化事件, timestamp是UNIX timestamp, 如果是当前时间传0
+ - log(JSON.stringify(event), timestamp): 存储结构化事件, timestamp是UNIX timestamp, 如果是当前时间传0
 
 ### Class shiningstars.acm.AdLoader
 
@@ -76,9 +86,10 @@
 
  - addEventListener(callback): 注册侦听事件
  - load(): 用于提前加载广告，提前加载完成再播放利于提高用户体验
- - show(reward_id, user_id): 展示广告
+ - show(rewardId, userId): 展示广告
 
 #### Events
+
  - AD_LOADED = 1: 加载完成可以使用show方法来播放
  - AD_COMPLETED = 2: 广告播放完毕
  - VIDEO_CLICKED = 3: 广告被点击
@@ -114,6 +125,11 @@
 
 ## 历史版本
 
+### v0.1.2
+ - 增加关闭接口
+ - 增加Pause事件
+ - 调整log参数顺序
+  
 ### v0.1.1
  - 增加SDK版本查询
  - 更改API使用方式
