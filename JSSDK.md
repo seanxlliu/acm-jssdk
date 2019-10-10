@@ -19,6 +19,14 @@
 ### 初始化 SDK
 
 ```javascript
+function managerEventCb(e) {
+  // handle system events
+}
+
+function adCb(e) {
+  // handle rewards
+}
+
 function init(args) {
   if (typeof shiningstars.acm.Manager != "undefined") {
     // check the bridge
@@ -33,6 +41,9 @@ function init(args) {
       var event = manager.Event;
       var adloader = manager.AdLoader;
       var adBanner = manager.AdBanner;
+
+      manager.addEventListener(managerEventCb);
+      adloader.addEventListener(adCb);
     }
   }
 }
@@ -74,8 +85,8 @@ function init(args) {
 
 #### Methods
 
-- setData(data, callback): 存储数据
-- getData(callback): 提取数据
+- setData(data, callback): 存储数据. callback(error, data), error - 错误消息, null 代表无错误。
+- getData(callback): 提取数据. callback(error, data), error - 错误消息, null 代表无错误。 data 是之前按用户存储的数据。
 
 ### Class shiningstars.acm.Event
 
@@ -101,7 +112,7 @@ function init(args) {
 #### Example
 
 ```javascript
-function callback(e) {
+function adCb(e) {
   if (e == adloader.AD_LOADED) {
     adloader.show(REWARD_ID, USER_ID);
   }
@@ -109,7 +120,6 @@ function callback(e) {
 
 function show(args) {
   if (adloader) {
-    adloader.addEventListener(callback);
     adloader.load();
     // show some game information
   }
