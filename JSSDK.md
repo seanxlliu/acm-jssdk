@@ -105,8 +105,8 @@ function init(args) {
 #### Events
 
 - AD_LOADED = 1: 加载完成可以使用 show 方法来播放
-- AD_COMPLETED = 2: 广告播放完毕
-- VIDEO_CLICKED = 3: 广告被点击
+- AD_COMPLETED = 2: 广告播放完毕。可以利用该事件恢复游戏
+- VIDEO_CLICKED = 3: 广告被点击, 这里注意有些广告并不要求点击, 因此在观看时间符合要求之后也会触发该事件。应该用这个事件来判断是否给予奖励
 - VIDEO_LOAD_FAILED = 4: 广告素材加载失败
 
 #### Example
@@ -145,6 +145,7 @@ function show(args) {
 - 增加关闭接口
 - 增加 Pause 事件
 - 调整 log 参数顺序
+- 调整事件说明
 
 ### v0.1.1
 
